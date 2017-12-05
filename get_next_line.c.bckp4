@@ -1,0 +1,97 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acauchy <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/22 11:57:36 by acauchy           #+#    #+#             */
+/*   Updated: 2017/11/22 17:32:53 by acauchy          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <unistd.h>
+#include "libft.h"
+#include "get_next_line.h"
+
+/*
+** Ca passe dans la lib ça ?
+*/
+
+static void	ft_lstclear(void* content, size_t size)
+{
+	free(content);
+	content = NULL;
+}
+
+static int	read_fd(int fd, t_list **head)
+{
+	char	buff[BUFF_SIZE];
+	int		really_read;
+	t_list	*lst_elem;
+	t_list	*tail;
+
+	really_read = read(fd, buff, BUFF_SIZE);
+	tail = *head;
+	while (really_read != 0)
+	{
+		if (really_read == -1)
+			return (-1);
+		really_read = read(fd, buff, BUFF_SIZE);
+		if (!(lst_elem = ft_lstnew(buff, really_read)))
+		{
+			ft_lstdel(&head, ft_lstclear);
+			return (-1);
+		}
+		if (!*head)
+			*head = lst_elem;
+		else
+			ft_lstpushback(&tail, lst_elem);
+		tail = lst_elem;
+	}
+	return (0);
+}
+
+static char	*search_next(t_list **head, char **current_char)
+{
+	char	*ret;
+	void	*endl_pos;
+
+	while (*head)
+	{
+		endl = ft_memchr(current_char, '\n', (*head)->content_size);
+		if (endl)
+		{
+			if (endl < ((*head)->content + (*head)->content_size - 1))
+				*current_char = endl;
+			ret = ft_memcpy(ret, current_char,
+					((*head)->content + (*head)->content_size - 1);
+		}
+		else
+		{
+			
+		}
+	}
+	// ne pas oublier de free si c'est la derniere ligne
+}
+
+int			get_next_line(const int fd, char **line)
+{
+	static int	current_fd = -1;
+	static char	*current_char = NULL;
+	t_list		*head;
+
+	if (current_fd != fd)
+	{
+		ft_lstdel(&head, ft_lstclear);
+		if (read_fd(fd, &head) == -1)
+			return (-1);
+	}
+	else
+	{
+		// if pas line return -1 qqpart si il reste la place...
+		if ((*line = search_next(&head, &current_char)) == 0)
+			return (0);
+	}
+	return (1);
+}

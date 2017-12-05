@@ -1,0 +1,95 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acauchy <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/22 11:57:36 by acauchy           #+#    #+#             */
+/*   Updated: 2017/11/22 17:32:53 by acauchy          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <unistd.h>
+#include "libft.h"
+#include "get_next_line.h"
+
+/*
+** bon en fait c'est plus ou moins un pop_front hein...
+** Donc intégration à libft possible.
+** Si intégration penser a gerer le free ailleurs.
+*/
+
+static char	*get_from_list(char **head)
+{
+	t_list	*elem;
+	char	*content;
+
+	elem = NULL;
+	if (head && *head)
+		elem = *head;
+	*head = (*head)->next;
+	content = (char*)elem->content;
+	free(elem->content);
+	free(elem);
+	return (content);
+}
+
+static void	add_to_list(char *buff, t_list **head, char **rest)
+{
+	char		*tmp;
+	char		**splited_buff;
+	int			i;
+
+	splitted_buff = ft_strsplit(buff, '\n');
+	i = 0;
+	while (splitted_buff[i])
+	{
+		if (i == 0)
+		{
+			tmp = ft_strjoin(*rest, splitted_buff[i]);
+			free(*rest);
+			free(splitted_buff[i]);
+			*rest = tmp;
+		}
+		if (!splitted_buff[i + 1])
+		{
+			*rest = 
+		}
+		ft_lstpushback(head, NEWMAILLON);
+		++i;
+	}
+	free(splitted_buff);
+}
+
+static int	read_fd(t_list **head)
+{
+	static char	*rest = ft_strdup("");
+	int		char_read;
+	char	buff[BUFF_SIZE + 1];
+
+	buff[BUFF_SIZE] = '\0';
+	char_read = read(fd, buff, BUFF_SIZE);
+	while (char_read > 0)
+	{
+		add_to_list(buff, &rest);
+		char_read = read(fd, buff, BUFF_SIZE);
+	}
+	return (char_read);
+}
+
+int	get_next_line(const int fd, char **line)
+{
+	static int	current_fd == -1;
+	t_list		*head;
+
+	if (current_fd != fd)
+	{
+		//free previous list
+		if (read_fd(fd, &head) == -1)
+			return (-1);
+	}
+	if (!(*line = get_from_list(&head)))
+		return (0);
+	return (1);
+}

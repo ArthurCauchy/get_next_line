@@ -1,0 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acauchy <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/22 11:57:36 by acauchy           #+#    #+#             */
+/*   Updated: 2017/11/22 17:32:53 by acauchy          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <unistd.h>
+#include "libft.h"
+#include "get_next_line.h"
+
+static int	get_from_list(const int fd, char **line)
+{
+	static t_list	**head = NULL;
+	t_list		**prev;
+
+	if (!head || !*head)
+		perform_read(fd, head);
+	if (!head)
+		return (0);
+	*line = ft_strdup((char*)(*head)->content);
+	
+	prev = head;
+	head = (*head)->next;
+	free((*prev)->content);
+	free(*prev);
+}
+
+static int	perform_read(const int fd, t_list **head)
+{
+	char	buf[BUFF_SIZE];
+	char	
+	size_t	really_read;
+	void	*next_endl;
+
+	really_read = read(fd, buff, BUFF_SIZE);
+	if (really_read <= 0)
+		return (really_read);
+	while (next_endl = ft_memchr(buf, '\n', BUFF_SIZE))
+	{
+		
+	}
+	*head = ft_lstnew();
+}
+
+int		get_next_line(const int fd, char **line)
+{
+	if (!line || get_from_list(fd, line) == -1)
+		return (-1);
+}
